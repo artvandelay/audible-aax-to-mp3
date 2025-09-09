@@ -31,7 +31,7 @@ python3 -m venv ~/pyenv/aax2mp3
 source ~/pyenv/aax2mp3/bin/activate
 
 # Clone this repo and install Python packages
-git clone <your-repo-url>
+git clone https://github.com/artvandelay/audible-aax-to-mp3.git
 cd audible-aax-to-mp3
 pip install -r requirements.txt
 ```
