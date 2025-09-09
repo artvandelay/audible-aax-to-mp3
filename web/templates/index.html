@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AAX → per-chapter MP3</title>
+    <style>
+      body { font-family: -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 2rem; }
+      .card { max-width: 640px; margin: 0 auto; padding: 1.5rem; border: 1px solid #ddd; border-radius: 8px; }
+      label { display: block; margin: 0.75rem 0 0.25rem; }
+      input[type="text"], input[type="file"], select { width: 100%; padding: 0.5rem; }
+      button { margin-top: 1rem; padding: 0.6rem 1rem; cursor: pointer; }
+      .flash { color: #b00020; margin-bottom: 0.5rem; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>Convert Audible .aax to per-chapter MP3</h2>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for msg in messages %}
+            <div class="flash">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('convert') }}" method="post" enctype="multipart/form-data">
+        <label for="aax">AAX file</label>
+        <input type="file" id="aax" name="aax" accept=".aax" required>
+
+        <label for="activation_bytes">Activation bytes (8 hex)</label>
+        <input type="text" id="activation_bytes" name="activation_bytes" placeholder="e.g., 40d0ec08" value="{{ default_key }}" required>
+
+        <label for="quality">MP3 Quality (VBR 0–9, lower is better)</label>
+        <select id="quality" name="quality">
+          {% set dq = default_quality|default('2') %}
+          {% for q in ['0','1','2','3','4','5','6','7','8','9'] %}
+            <option value="{{ q }}" {% if q == dq %}selected{% endif %}>{{ q }}{% if q=='2' %} (default){% endif %}</option>
+          {% endfor %}
+        </select>
+
+        <button type="submit">Convert</button>
+      </form>
+
+      <p style="margin-top:1rem; font-size: 0.95rem; color:#555;">You'll need your activation bytes. See the Audible AAX docs and tools like <a href="https://github.com/inAudible-NG/audible-activator" target="_blank" rel="noopener">audible-activator</a>.</p>
+    </div>
+  </body>
+</html>
